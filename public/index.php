@@ -1,5 +1,6 @@
 <?php
 include('connect.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +59,6 @@ include('connect.php');
         </div>
 
         <div class='flex max-lg:ml-auto space-x-4'>
-         
           <button
             class='px-4 py-2 text-sm rounded-full font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]' id="btn_login_home">Écrivez Votre Premier Article</button>
           <button id="toggleOpen" class='lg:hidden'>
@@ -173,7 +173,8 @@ console.log(btn_home_login);
 
 btn_home_login.addEventListener("click",()=>{
   window.location='login.php'
-})
+});
+
 </script>
 
 </body>
