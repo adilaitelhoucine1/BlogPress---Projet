@@ -17,6 +17,7 @@ if(isset($_POST['submit'])) {
         $author = $result->fetch_assoc();
         print_r($author);
         $_SESSION['author_id'] = $author['id_auteur'];
+        $_SESSION['author_name'] = $author['username'];
 
         header("Location: dashboard.php");
         exit();
