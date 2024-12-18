@@ -1,1 +1,1 @@
-window.location.href = "public/test.html";
+document.querySelector(".edit_btn").textContent

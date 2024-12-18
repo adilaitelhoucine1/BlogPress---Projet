@@ -249,25 +249,26 @@ if (isset($_GET['idDelete'])) {
                     while($row = $result->fetch_assoc()) { 
                 ?>
                     <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <h3 class="text-xl font-bold mb-2"><?php echo htmlspecialchars($row['title']); ?></h3>
-                        <p class="text-gray-600 mb-4"><?php echo htmlspecialchars($row['content']); ?></p>
-                        <p class="text-red-600 mb-4"><?php echo ($row['id_artcile']); ?></p>
+                        <h3 class="title_article  text-xl font-bold mb-2"><?php echo htmlspecialchars($row['title']); ?></h3>
+                        <p class="content_article text-gray-600 mb-4"><?php echo htmlspecialchars($row['content']); ?></p>
+                        <p class="id_content text-red-600 mb-4"><?php echo ($row['id_artcile']); ?></p>
                         <div class="flex justify-between items-center text-sm text-gray-500">
                             <span>Created: <?php echo $row['created_at']; ?></span>
                             <div>
-                                <button class="edit_btn bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600" name="test">
-                                    Edit
-                                </button>
+                              
+                              <button type="submit" class="edit_btn bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600" name="test">
+                                          Edit
+                              </button>
 
                               
             
-                        <input type="hidden" name="id_article" value="123"> 
+                        <!-- <input type="hidden" name="id_article" value="123">  -->
                         <button type="submit" name="delete" class="delete_btn bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-
                         <?php 
                           echo "
                            <form method='GET'>
                               <a href='dashboard.php?idDelete=".$row['id_artcile']."' >delete</a>
+                              <a href='dashboard.php?idDelete=".$row['id_artcile']."' ></a>
                            </form>";
                           
                         ?>
@@ -384,6 +385,88 @@ if (isset($_GET['idDelete'])) {
 </div>
 
 
+<!-- modal -->
+<div id="editModal" class="fixed inset-0 bg-black bg-opacity-50  items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg p-6 w-[90%] max-w-md shadow-lg">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-gray-800">Modifier les Informations</h3>
+          <button id="closeEditModal" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <?php
+if (isset($_POST['update'])) {
+   $id = $_POST['idupdate'];
+   $title = $_POST['Newtitle'];
+  $content = $_POST['Newcontent'];
+
+   
+    $stmt = $conn->prepare("UPDATE article SET title = ?, content = ? WHERE id_artcile = ?");
+    $stmt->bind_param("ssi", $title, $content, $id);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Record updated successfully');</script>";
+        header("Location: dashboard.php"); 
+        exit;
+    } else {
+        echo "<script>alert('Error updating record');</script>";
+    }
+
+    $stmt->close();
+    
+}
+?>
+        <!-- Form -->
+        <form method="POST" id="editForm" class="flex flex-col gap-4">
+          <!-- Nom -->
+          <div>
+            <label for="editName" class="block text-sm font-semibold text-gray-700">Nom</label>
+            <input
+              type="text"
+              id="editName"
+              name="Newtitle"
+              placeholder="New Title"
+              class="input w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              required
+            />
+          </div>
+          <input
+        type="text"
+        class="id_article_update"
+        name="idupdate"
+         />
+          <!-- content -->
+          <div>
+            <label for="editcontent" class="block text-sm font-semibold text-gray-700">Content</label>
+            <textarea 
+                    name="Newcontent" 
+                    id="editcontent" 
+                    rows="8" 
+                    required 
+                    placeholder="Write your article content here..."
+                    class="mt-1 block w-full rounded-lg border-2 border-gray-200 px-4 py-3 bg-white shadow-sm transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none resize-none"></textarea>
+          </div>
+    
+       
+    
+          <!-- Submit Button -->
+          <div class="flex justify-end">
+            <button
+            id="Modifier-btn-form"
+              type="submit"
+              name="update"
+              class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            >
+              Enregistrer les Modifications
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
 
 <script>
 
@@ -441,9 +524,20 @@ document.querySelector(".logout_btn").addEventListener("click", () => {
   }
 });
  
-document.querySelector(".delete_btn").addEventListener("click", () => {
-  
+document.querySelector(".edit_btn").addEventListener("click", () => {
+   document.querySelector("#editModal").classList.remove("hidden");
+   console.log(document.querySelector(".edit_btn").parentElement.parentElement.parentElement);
+   console.log(document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".title_article").textContent);
+   console.log(document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".content_article").textContent);
+   console.log(document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".id_content").textContent);
 
+  document.querySelector("#editName").value=document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".title_article").textContent;
+  document.querySelector("#editcontent").value=document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".content_article").textContent;
+  document.querySelector(".id_article_update").value=document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".id_content").textContent;
+});
+
+document.querySelector("#closeEditModal").addEventListener("click", () => {
+   document.querySelector("#editModal").classList.add("hidden")
 });
 
 </script>
