@@ -888,10 +888,6 @@ video {
   min-width: 200px;
 }
 
-.max-w-4xl {
-  max-width: 56rem;
-}
-
 .max-w-6xl {
   max-width: 72rem;
 }
@@ -1029,12 +1025,6 @@ video {
   margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.space-y-6 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
-}
-
 .space-y-8 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
@@ -1148,11 +1138,6 @@ video {
 
 .bg-gray-50\/50 {
   background-color: rgb(249 250 251 / 0.5);
-}
-
-.bg-indigo-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(79 70 229 / var(--tw-bg-opacity, 1));
 }
 
 .bg-red-500 {
@@ -1275,10 +1260,6 @@ video {
 
 .p-0 {
   padding: 0px;
-}
-
-.p-2 {
-  padding: 0.5rem;
 }
 
 .p-4 {
@@ -1506,6 +1487,11 @@ video {
 
 .text-inherit {
   color: inherit;
+}
+
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity, 1));
 }
 
 .text-transparent {
@@ -1819,11 +1805,6 @@ video {
   background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
 }
 
-.hover\:bg-indigo-500:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(99 102 241 / var(--tw-bg-opacity, 1));
-}
-
 .hover\:bg-red-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(220 38 38 / var(--tw-bg-opacity, 1));
@@ -1885,11 +1866,6 @@ video {
   border-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
 }
 
-.focus\:border-indigo-500:focus {
-  --tw-border-opacity: 1;
-  border-color: rgb(99 102 241 / var(--tw-border-opacity, 1));
-}
-
 .focus\:border-t-transparent:focus {
   border-top-color: transparent;
 }
@@ -1922,16 +1898,6 @@ video {
 .focus\:ring-gray-200:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity, 1));
-}
-
-.focus\:ring-indigo-400:focus {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(129 140 248 / var(--tw-ring-opacity, 1));
-}
-
-.focus\:ring-indigo-500:focus {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity, 1));
 }
 
 .focus\:ring-offset-2:focus {
@@ -2208,11 +2174,6 @@ video {
   .sm\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-  }
-
-  .sm\:text-sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
   }
 }
 

@@ -3,6 +3,22 @@ session_start();
 include('connect.php');
 
 
+                     
+if (isset($_GET['idDelete'])) {
+  $articleId = $_GET['idDelete'];
+  $stmt = $conn->prepare("DELETE FROM article WHERE id_artcile = ?");
+  $stmt->bind_param("i", $articleId);
+
+  if ($stmt->execute()) {
+      echo "<script>alert('Article supprimé avec succès');</script>";
+  } else {
+      echo "<script>alert('Erreur lors de la suppression');</script>";
+  }
+
+  $stmt->close();
+
+}
+
 
 
 
@@ -243,29 +259,23 @@ include('connect.php');
                                     Edit
                                 </button>
 
+                              
+            
+                        <input type="hidden" name="id_article" value="123"> 
+                        <button type="submit" name="delete" class="delete_btn bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
 
-                                <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" name="delete">
-                                    Delete
-                                </button>
+                        <?php 
+                          echo "
+                           <form method='GET'>
+                              <a href='dashboard.php?idDelete=".$row['id_artcile']."' >delete</a>
+                           </form>";
+                          
+                        ?>
+                        </button>
+            
 
-                                                <?php                        
-                                        if (isset($_POST['delete'])) {
-                                            //$articleId = $_POST['id_artcile'];
-                                            echo "<script>alert('$articleId');</script>";
 
-                                            // $stmt = $conn->prepare("DELETE FROM article WHERE id = ?");
-                                            // $stmt->bind_param("i", $articleId);
-
-                                            // if ($stmt->execute()) {
-                                            //     $_SESSION['message'] = 'Article deleted successfully!';
-                                            // } else {
-                                            //     $_SESSION['message'] = 'Error deleting article';
-                                            // }
-
-                                            // header("Location: dashboard.php");
-                                            // exit();
-                                        }
-                                        ?>
+                           
                             </div>
                         </div>
                     </div>
@@ -430,18 +440,12 @@ document.querySelector(".logout_btn").addEventListener("click", () => {
     window.location.href = "http://localhost/BlogPress---Projet/public/logout.php";
   }
 });
+ 
+document.querySelector(".delete_btn").addEventListener("click", () => {
+  
 
-/*
+});
 
-*/ 
-// edit btn
-// let edit_btns=document.querySelectorAll(".edit_btn");
-// edit_btns.forEach(btn => {
-//     btn.addEventListener("click",()=>{
-//       const articleId = btn.getAttribute("data-id");
-//       alert(articleId);
-//     })
-// });
 </script>
 </body>
 </html>
