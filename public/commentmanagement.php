@@ -3,22 +3,6 @@ session_start();
 include('connect.php');
 
 
-                     
-if (isset($_GET['idDelete'])) {
-  $articleId = $_GET['idDelete'];
-  $stmt = $conn->prepare("DELETE FROM article WHERE id_artcile = ?");
-  $stmt->bind_param("i", $articleId);
-
-  if ($stmt->execute()) {
-      echo "<script>alert('Article supprimé avec succès');</script>";
-  } else {
-      echo "<script>alert('Erreur lors de la suppression');</script>";
-  }
-
-  $stmt->close();
-
-}
-
 
 
 
@@ -86,7 +70,7 @@ if (isset($_GET['idDelete'])) {
         </li>
         <li>
           <a class="" href="#">
-            <button class=" middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white  shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85]  w-full flex items-center gap-4 px-4 mt-4  capitalize " type="button">
+            <button class="gerer_comment middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white  shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85]  w-full flex items-center gap-4 px-4 mt-4  capitalize " type="button">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-5 h-5 text-inherit">
                 <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"></path>
               </svg>
@@ -98,14 +82,12 @@ if (isset($_GET['idDelete'])) {
       <ul class="mb-4 flex flex-col gap-1">
         <li>
           <a class="" href="#">
-            <button class="logout_btn middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 mt-4  capitalize" type="button">
+            <button class="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 mt-4  capitalize" type="button">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-5 h-5 text-inherit">
                 <path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 006 5.25v13.5a1.5 1.5 0 001.5 1.5h6a1.5 1.5 0 001.5-1.5V15a.75.75 0 011.5 0v3.75a3 3 0 01-3 3h-6a3 3 0 01-3-3V5.25a3 3 0 013-3h6a3 3 0 013 3V9A.75.75 0 0115 9V5.25a1.5 1.5 0 00-1.5-1.5h-6zm10.72 4.72a.75.75 0 011.06 0l3 3a.75.75 0 010 1.06l-3 3a.75.75 0 11-1.06-1.06l1.72-1.72H9a.75.75 0 010-1.5h10.94l-1.72-1.72a.75.75 0 010-1.06z" clip-rule="evenodd"></path>
               </svg>
               <p class="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">Log out</p>
             </button>
-            
-
           </a>
         </li>
 
@@ -229,322 +211,66 @@ if (isset($_GET['idDelete'])) {
         </div>
       </div>
       
-      <div class="main_contaainer mb-4 ">
-      <!-- Ici les stats ghadi ikono -->
-      <div class="main_contaainer mb-4">
-    <!-- Articles Section -->
-    <div class="articles_section" style="display: none;">
-        <div class="w-full p-8">
-            <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">My Articles</h2>
+      <div class="w-full p-8">
+            <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">My Articles's Comment </h2>
             <div class="grid gap-4">
-                <?php 
-                $author_id = $_SESSION['author_id'];
-                $sql = "SELECT * FROM article WHERE id_auteur = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $author_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
+            <?php 
+ $author_id = $_SESSION['author_id'];    
+$sql = "SELECT * FROM  article a
+JOIN comments c  ON c.id_artcile = a.id_artcile 
+WHERE a.id_auteur = ?";
 
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) { 
-                ?>
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <h3 class="title_article  text-xl font-bold mb-2"><?php echo htmlspecialchars($row['title']); ?></h3>
-                        <p class="content_article text-gray-600 mb-4"><?php echo htmlspecialchars($row['content']); ?></p>
-                        <p class="id_content text-red-600 mb-4"><?php echo ($row['id_artcile']); ?></p>
-                        <div class="flex justify-between items-center text-sm text-gray-500">
-                            <span>Created: <?php echo $row['created_at']; ?></span>
-                            <div>
-                              
-                              <button type="submit" class="edit_btn bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600" name="test">
-                                          Edit
-                              </button>
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $author_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
-                              
-            
-                        <!-- <input type="hidden" name="id_article" value="123">  -->
-                        <button type="submit" name="delete" class="delete_btn bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                        <?php 
-                          echo "
-                           <form method='GET'>
-                              <a href='dashboard.php?idDelete=".$row['id_artcile']."' >delete</a>
-                              <a href='dashboard.php?idDelete=".$row['id_artcile']."' ></a>
-                           </form>";
-                          
-                        ?>
-                        </button>
-            
-
-
-                           
-                            </div>
-                        </div>
-                    </div>
-                <?php 
-                    }
-                }
-                ?>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Article Section -->
-    <div class="add_article_section" style="display: none;">
-
-   <div class="w-4xl m-auto bg-gradient-to-r from-white to-gray-50 shadow-2xl rounded-xl p-8 mt-10 border border-gray-100">
-        <div class="mb-8 text-center">
-            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">Create New Article</h2>
-            <p class="text-gray-600 mt-2">Share your thoughts with the world</p>
-        </div>
-
-        <?php 
-              if (isset($_POST['add'])) {
-                    $title = $_POST['title'];
-                    $content = $_POST['content'];
-                    $author_id = $_SESSION['author_id'];
-                
-                        $stmt = $conn->prepare("INSERT INTO article (title, content, id_auteur) VALUES (?, ?, ?)");
-                        $stmt->bind_param("ssi", $title, $content, $author_id);
-                        
-                        if($stmt->execute()) {
-                          unset($_POST); // Clear the POST data
-
-                          echo "<script>alert('Article added successfully!');</script>";
-                        } else {
-                            echo "<script>alert('Error adding article')</script>";
-                        }
-                }
-                ?>
-
-        <form method="POST" action="" class="space-y-8" id="addArticleForm">
-        <!-- Title-->
-            <div class="group">
-                <label for="title" class="block text-sm font-semibold text-gray-700 mb-2 transition-all duration-200 group-focus-within:text-blue-600">
-                    <span class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                        Article Title
-                    </span>
-                </label>
-                <input 
-                    type="text" 
-                    name="title" 
-                    id="title" 
-                    required 
-                    placeholder="Enter a captivating title..."
-                    class="mt-1 block w-full rounded-lg border-2 border-gray-200 px-4 py-3 bg-white shadow-sm transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none">
-            </div>
-
-            <!-- Content -->
-            <div class="group">
-                <label for="content" class="block text-sm font-semibold text-gray-700 mb-2 transition-all duration-200 group-focus-within:text-blue-600">
-                    <span class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
-                        </svg>
-                        Article Content
-                    </span>
-                </label>
-                <textarea 
-                    name="content" 
-                    id="content" 
-                    rows="8" 
-                    required 
-                    placeholder="Write your article content here..."
-                    class="mt-1 block w-full rounded-lg border-2 border-gray-200 px-4 py-3 bg-white shadow-sm transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none resize-none"></textarea>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="flex justify-end gap-4">
-                <button 
-                    type="button"
-                    class="px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg shadow-sm hover:bg-gray-200 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 focus:outline-none transition-all duration-200">
-                    Cancel
-                </button>
-                <button 
-                    name="add"
-                    class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-400 text-white font-semibold rounded-lg shadow-md hover:from-blue-700 hover:to-blue-500 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none transition-all duration-200 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Publish Article
-                </button>
-            </div>
-        </form>
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
    
-    </div>
-
+?>
+       <div class="bg-white p-6 rounded-lg shadow-md justify-between flex flex-wrap hover:shadow-lg transition-shadow">
+    <h3 class="text-xl font-bold mb-2"><?php echo htmlspecialchars($row['visiteur_name']); ?></h3>
+    <h3 class="text-xl font-bold mb-2 text-gray-800"><?php echo htmlspecialchars($row['visiteur_email']); ?></h3>
+    <p class="text-gray-600 mb-4"><?php echo htmlspecialchars($row['content']); ?></p>
+    <p class="text-red-600 mb-4 font-semibold">Article ID: <?php echo htmlspecialchars($row['id_artcile']); ?></p>
+    <div class="flex justify-between items-center text-sm text-gray-500">
+        <span class="mr-8">Created: <?php echo $row['created_at']; ?></span>
+        <form action="delete_comment.php" method="POST" class="flex items-center">
+            <input type="hidden" name="comment_id" value="<?php echo $row['id_artcile']; ?>" />
+            <button type="submit" class="text-red-500 hover:text-red-700 font-semibold focus:outline-none transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 4H8l-1-2H4a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1zM8 4h8l1 2H7l1-2z"></path>
+                </svg>
+                Delete
+            </button>
+        </form>
     </div>
 </div>
 
-      </div>
-    </div>
+<?php 
+        }
+    } else {
+        echo "walo comments.";
+    }
+?>
+
+            </div>
+        </div>
  
   </div>
 </div>
-
-
-<!-- modal -->
-<div id="editModal" class="fixed inset-0 bg-black bg-opacity-50  items-center justify-center z-50 hidden">
-      <div class="bg-white rounded-lg p-6 w-[90%] max-w-md shadow-lg">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-xl font-bold text-gray-800">Modifier les Informations</h3>
-          <button id="closeEditModal" class="text-gray-500 hover:text-gray-700">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        <?php
-if (isset($_POST['update'])) {
-   $id = $_POST['idupdate'];
-   $title = $_POST['Newtitle'];
-  $content = $_POST['Newcontent'];
-
-   
-    $stmt = $conn->prepare("UPDATE article SET title = ?, content = ? WHERE id_artcile = ?");
-    $stmt->bind_param("ssi", $title, $content, $id);
-
-    if ($stmt->execute()) {
-        echo "<script>alert('Record updated successfully');</script>";
-        header("Location: dashboard.php"); 
-        exit;
-    } else {
-        echo "<script>alert('Error updating record');</script>";
-    }
-
-    $stmt->close();
-    
-}
-?>
-        <!-- Form -->
-        <form method="POST" id="editForm" class="flex flex-col gap-4">
-          <!-- Nom -->
-          <div>
-            <label for="editName" class="block text-sm font-semibold text-gray-700">Nom</label>
-            <input
-              type="text"
-              id="editName"
-              name="Newtitle"
-              placeholder="New Title"
-              class="input w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-              required
-            />
-          </div>
-          <input
-        type="text"
-        class="id_article_update"
-        name="idupdate"
-         />
-          <!-- content -->
-          <div>
-            <label for="editcontent" class="block text-sm font-semibold text-gray-700">Content</label>
-            <textarea 
-                    name="Newcontent" 
-                    id="editcontent" 
-                    rows="8" 
-                    required 
-                    placeholder="Write your article content here..."
-                    class="mt-1 block w-full rounded-lg border-2 border-gray-200 px-4 py-3 bg-white shadow-sm transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none resize-none"></textarea>
-          </div>
-    
-       
-    
-          <!-- Submit Button -->
-          <div class="flex justify-end">
-            <button
-            id="Modifier-btn-form"
-              type="submit"
-              name="update"
-              class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-            >
-              Enregistrer les Modifications
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-    
-
 <script>
 
-// pour eviter envoie dyal data f loading
-
-// document.getElementById('addArticleForm').addEventListener('submit', function(event) {
-
-//   event.preventDefault(); 
-
-// });
-
-
-// window.addEventListener("DOMContentLoaded", () => {
-//   document.getElementById('addArticleForm').addEventListener('submit', function(event) {
-//     event.preventDefault(); 
-//     });
-//   });
-
-
-const authorName = "<?php echo isset($_SESSION['author_name']) ? $_SESSION['author_name'] : 'Unknown'; ?>";
-document.querySelector(".username").textContent = "Bienvenue " + authorName;
-
-document.querySelector(".Add_article").addEventListener("click", () => {
-
-//   document.querySelector(".btn_y").classList.add("bg-blue-900");
-//  document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
-//  document.querySelector(".voir").classList.remove("bg-blue-900");
-//   document.querySelector(".articles_section").style.display = "none";
-//   document.querySelector(".add_article_section").style.display = "block";
-window.location.href = "http://localhost/BlogPress---Projet/public/addform.php";
-});
-
-document.querySelector(".voir_article").addEventListener("click", () => {
-
- document.querySelector(".btn_y").classList.remove("bg-blue-900");
- document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
- document.querySelector(".voir").classList.add("bg-blue-900");
-  document.querySelector(".articles_section").style.display = "block";
-   // document.querySelector(".add_article_section").style.display = "none";
-});
-
-document.querySelector(".gerer_comment").addEventListener("click", () => {
-
-  window.location.href = "http://localhost/BlogPress---Projet/public/commentmanagement.php";
-});
-
 document.querySelector(".dashboard_t").addEventListener("click", () => {
+    window.location.href = "http://localhost/BlogPress---Projet/public/dashboard.php";
+
+
+});
+  ddocument.querySelector(".gerer_comment").classList.add("bg-blue-900");
   document.querySelector(".btn_y").classList.remove("bg-blue-900");
-  document.querySelector(".dashboard_t").classList.add("bg-blue-900");
+ document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
   document.querySelector(".voir").classList.remove("bg-blue-900");
-  window.location.href ="http://localhost/BlogPress---Projet/public/dashboard.php";
-
-});
-
-document.querySelector(".logout_btn").addEventListener("click", () => {
-
-  if (confirm("Are you sur You want to LogOut!") == true) {
-    window.location.href = "http://localhost/BlogPress---Projet/public/logout.php";
-  }
-});
- 
-document.querySelector(".edit_btn").addEventListener("click", () => {
-   document.querySelector("#editModal").classList.remove("hidden");
-   console.log(document.querySelector(".edit_btn").parentElement.parentElement.parentElement);
-   console.log(document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".title_article").textContent);
-   console.log(document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".content_article").textContent);
-   console.log(document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".id_content").textContent);
-
-  document.querySelector("#editName").value=document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".title_article").textContent;
-  document.querySelector("#editcontent").value=document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".content_article").textContent;
-  document.querySelector(".id_article_update").value=document.querySelector(".edit_btn").parentElement.parentElement.parentElement.querySelector(".id_content").textContent;
-});
-
-document.querySelector("#closeEditModal").addEventListener("click", () => {
-   document.querySelector("#editModal").classList.add("hidden")
-});
-
-
 </script>
 </body>
 </html>
