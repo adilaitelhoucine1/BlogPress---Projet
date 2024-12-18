@@ -82,14 +82,12 @@ include('connect.php');
       <ul class="mb-4 flex flex-col gap-1">
         <li>
           <a class="" href="#">
-            <button class="logout_btn middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 mt-4  capitalize" type="button">
+            <button class="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 mt-4  capitalize" type="button">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-5 h-5 text-inherit">
                 <path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 006 5.25v13.5a1.5 1.5 0 001.5 1.5h6a1.5 1.5 0 001.5-1.5V15a.75.75 0 011.5 0v3.75a3 3 0 01-3 3h-6a3 3 0 01-3-3V5.25a3 3 0 013-3h6a3 3 0 013 3V9A.75.75 0 0115 9V5.25a1.5 1.5 0 00-1.5-1.5h-6zm10.72 4.72a.75.75 0 011.06 0l3 3a.75.75 0 010 1.06l-3 3a.75.75 0 11-1.06-1.06l1.72-1.72H9a.75.75 0 010-1.5h10.94l-1.72-1.72a.75.75 0 010-1.06z" clip-rule="evenodd"></path>
               </svg>
               <p class="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">Log out</p>
             </button>
-            
-
           </a>
         </li>
 
@@ -217,68 +215,10 @@ include('connect.php');
       <!-- Ici les stats ghadi ikono -->
       <div class="main_contaainer mb-4">
     <!-- Articles Section -->
-    <div class="articles_section" style="display: none;">
-        <div class="w-full p-8">
-            <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">My Articles</h2>
-            <div class="grid gap-4">
-                <?php 
-                $author_id = $_SESSION['author_id'];
-                $sql = "SELECT * FROM article WHERE id_auteur = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $author_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) { 
-                ?>
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <h3 class="text-xl font-bold mb-2"><?php echo htmlspecialchars($row['title']); ?></h3>
-                        <p class="text-gray-600 mb-4"><?php echo htmlspecialchars($row['content']); ?></p>
-                        <p class="text-red-600 mb-4"><?php echo ($row['id_artcile']); ?></p>
-                        <div class="flex justify-between items-center text-sm text-gray-500">
-                            <span>Created: <?php echo $row['created_at']; ?></span>
-                            <div>
-                                <button class="edit_btn bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600" name="test">
-                                    Edit
-                                </button>
-
-
-                                <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" name="delete">
-                                    Delete
-                                </button>
-
-                                                <?php                        
-                                        if (isset($_POST['delete'])) {
-                                            //$articleId = $_POST['id_artcile'];
-                                            echo "<script>alert('$articleId');</script>";
-
-                                            // $stmt = $conn->prepare("DELETE FROM article WHERE id = ?");
-                                            // $stmt->bind_param("i", $articleId);
-
-                                            // if ($stmt->execute()) {
-                                            //     $_SESSION['message'] = 'Article deleted successfully!';
-                                            // } else {
-                                            //     $_SESSION['message'] = 'Error deleting article';
-                                            // }
-
-                                            // header("Location: dashboard.php");
-                                            // exit();
-                                        }
-                                        ?>
-                            </div>
-                        </div>
-                    </div>
-                <?php 
-                    }
-                }
-                ?>
-            </div>
-        </div>
-    </div>
+  
 
     <!-- Add Article Section -->
-    <div class="add_article_section" style="display: none;">
+    <div class="add_article_section">
 
    <div class="w-4xl m-auto bg-gradient-to-r from-white to-gray-50 shadow-2xl rounded-xl p-8 mt-10 border border-gray-100">
         <div class="mb-8 text-center">
@@ -372,76 +312,16 @@ include('connect.php');
  
   </div>
 </div>
-
-
-
 <script>
 
-// pour eviter envoie dyal data f loading
-
-// document.getElementById('addArticleForm').addEventListener('submit', function(event) {
-
-//   event.preventDefault(); 
-
-// });
-
-
-// window.addEventListener("DOMContentLoaded", () => {
-//   document.getElementById('addArticleForm').addEventListener('submit', function(event) {
-//     event.preventDefault(); 
-//     });
-//   });
-
-
-const authorName = "<?php echo isset($_SESSION['author_name']) ? $_SESSION['author_name'] : 'Unknown'; ?>";
-document.querySelector(".username").textContent = "Bienvenue " + authorName;
-
-document.querySelector(".Add_article").addEventListener("click", () => {
-
-//   document.querySelector(".btn_y").classList.add("bg-blue-900");
-//  document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
-//  document.querySelector(".voir").classList.remove("bg-blue-900");
-//   document.querySelector(".articles_section").style.display = "none";
-//   document.querySelector(".add_article_section").style.display = "block";
-window.location.href = "http://localhost/BlogPress---Projet/public/addform.php";
-});
-
-document.querySelector(".voir_article").addEventListener("click", () => {
-
- document.querySelector(".btn_y").classList.remove("bg-blue-900");
- document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
- document.querySelector(".voir").classList.add("bg-blue-900");
-  document.querySelector(".articles_section").style.display = "block";
-   // document.querySelector(".add_article_section").style.display = "none";
-});
-
-
-
 document.querySelector(".dashboard_t").addEventListener("click", () => {
- document.querySelector(".btn_y").classList.remove("bg-blue-900");
- document.querySelector(".dashboard_t").classList.add("bg-blue-900");
- document.querySelector(".voir").classList.remove("bg-blue-900");
+    window.location.href = "http://localhost/BlogPress---Projet/public/dashboard.php";
+
 
 });
-
-document.querySelector(".logout_btn").addEventListener("click", () => {
-
-  if (confirm("Are you sur You want to LogOut!") == true) {
-    window.location.href = "http://localhost/BlogPress---Projet/public/logout.php";
-  }
-});
-
-/*
-
-*/ 
-// edit btn
-// let edit_btns=document.querySelectorAll(".edit_btn");
-// edit_btns.forEach(btn => {
-//     btn.addEventListener("click",()=>{
-//       const articleId = btn.getAttribute("data-id");
-//       alert(articleId);
-//     })
-// });
+  document.querySelector(".btn_y").classList.add("bg-blue-900");
+ document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
+  document.querySelector(".voir").classList.remove("bg-blue-900");
 </script>
 </body>
 </html>
