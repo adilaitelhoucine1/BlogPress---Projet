@@ -85,14 +85,49 @@ if (isset($_GET['id_article'])) {
   
 
 
-      
-        <div class="bg-gray-100 p-4 rounded-lg">
-          <span class="block font-semibold text-gray-800">John Doe</span>
-          <span class="text-sm text-gray-500">Dec 19, 2024</span>
+      <?php 
+     $articleId = $_GET['id_article'];
+$sql = "SELECT * FROM  article a
+JOIN comments c  ON c.id_artcile = a.id_artcile 
+WHERE a.id_artcile = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $articleId);
+$stmt->execute();
+$result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            
+?>
+               <div class="bg-gray-100 p-4 rounded-lg">
+         <div class="flex flex-wrap gap-2">
+
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+<circle cx="12" cy="7" r="4" />
+<path d="M12 13c-4 0-7 2.5-7 5v2h14v-2c0-2.5-3-5-7-5z" />
+</svg>
+    <span class="block font-semibold text-gray-800 capitalize"><?php echo $row['visiteur_name'] ?></span>
+         </div>
+          <span class="text-sm text-gray-500"><?php echo $row['created_at'] ?></span>
           <p class="mt-2 text-gray-700">
-            This article is amazing! I learned a lot. Thanks for sharing!
+          <?php echo $row['content'] ?>
           </p>
         </div>
+
+<?php 
+        }
+    } else {
+        echo "there is no comments.";
+    }
+?>
+
+
+
+
+
+
+
       </div>
 
       <!-- Add Comment Form -->
