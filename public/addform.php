@@ -70,7 +70,7 @@ include('connect.php');
         </li>
         <li>
           <a class="" href="#">
-            <button class="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white  shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85]  w-full flex items-center gap-4 px-4 mt-4  capitalize " type="button">
+            <button class="gerer_comment middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white  shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85]  w-full flex items-center gap-4 px-4 mt-4  capitalize " type="button">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-5 h-5 text-inherit">
                 <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"></path>
               </svg>
@@ -169,7 +169,19 @@ include('connect.php');
           </div>
           <div class="p-4 text-right">
             <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Total des Articles</p>
-            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">0</h4>
+            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+
+            <?php         
+             $author_id = $_SESSION['author_id'];
+             $sql = "SELECT COUNT(id_auteur) FROM article WHERE id_auteur = ?";
+             $stmt = $conn->prepare($sql);
+             $stmt->bind_param("i", $author_id);
+             $stmt->execute();
+             $result = $stmt->get_result();
+             $row = $result->fetch_assoc();
+             echo $row['COUNT(id_auteur)'];
+             ?>
+            </h4>
           </div>
 
         </div>
@@ -181,7 +193,21 @@ include('connect.php');
           </div>
           <div class="p-4 text-right">
             <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Total des vues</p>
-            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">0</h4>
+            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+            <?php 
+             
+           
+             $author_id = $_SESSION['author_id'];
+             $sql = "SELECT SUM(views) FROM article ar join auteur au on ar.id_auteur=au.id_auteur WHERE ar.id_auteur = ?";
+             $stmt = $conn->prepare($sql);
+             $stmt->bind_param("i", $author_id);
+             $stmt->execute();
+             $result = $stmt->get_result();
+             
+             $row = $result->fetch_assoc();
+             echo $row['SUM(views)'];
+             ?>
+            </h4>
           </div>
 
         </div>
@@ -193,7 +219,23 @@ include('connect.php');
           </div>
           <div class="p-4 text-right">
             <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">total des Commentaires</p>
-            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">0</h4>
+            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+
+            <?php 
+             
+           
+             $author_id = $_SESSION['author_id'];
+             $sql = "SELECT count(c.id_comments) FROM article ar join auteur au on ar.id_auteur=au.id_auteur
+              join comments c on c.id_artcile=ar.id_artcile WHERE ar.id_auteur = ?";
+             $stmt = $conn->prepare($sql);
+             $stmt->bind_param("i", $author_id);
+             $stmt->execute();
+             $result = $stmt->get_result();
+             
+             $row = $result->fetch_assoc();
+             echo $row['count(c.id_comments)'];
+             ?>
+            </h4>
           </div>
    
         </div>
@@ -205,7 +247,22 @@ include('connect.php');
           </div>
           <div class="p-4 text-right">
             <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Moyenne des vues </p>
-            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">0</h4>
+            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+            <?php 
+             
+           
+             $author_id = $_SESSION['author_id'];
+             $sql = "SELECT FORMAT(AVG(views), 2) FROM article ar join auteur au on ar.id_auteur=au.id_auteur WHERE ar.id_auteur = ?";
+             $stmt = $conn->prepare($sql);
+             $stmt->bind_param("i", $author_id);
+             $stmt->execute();
+             $result = $stmt->get_result();
+             
+             $row = $result->fetch_assoc();
+             echo $row['FORMAT(AVG(views), 2)'];
+             ?>
+
+            </h4>
           </div>
 
         </div>
@@ -313,12 +370,37 @@ include('connect.php');
   </div>
 </div>
 <script>
+const authorName = "<?php echo isset($_SESSION['author_name']) ? $_SESSION['author_name'] : 'Unknown'; ?>";
+document.querySelector(".username").textContent = "Bienvenue " + authorName;
+
+document.querySelector(".Add_article").addEventListener("click", () => {
+
+//   document.querySelector(".btn_y").classList.add("bg-blue-900");
+//  document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
+//  document.querySelector(".voir").classList.remove("bg-blue-900");
+//   document.querySelector(".articles_section").style.display = "none";
+//   document.querySelector(".add_article_section").style.display = "block";
+window.location.href = "http://localhost/BlogPress---Projet/public/addform.php";
+});
+
+document.querySelector(".gerer_comment").addEventListener("click", () => {
+
+window.location.href = "http://localhost/BlogPress---Projet/public/commentmanagement.php";
+});
 
 document.querySelector(".dashboard_t").addEventListener("click", () => {
     window.location.href = "http://localhost/BlogPress---Projet/public/dashboard.php";
-
-
 });
+
+document.querySelector(".voir_article").addEventListener("click", () => {
+
+document.querySelector(".btn_y").classList.remove("bg-blue-900");
+document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
+document.querySelector(".voir").classList.add("bg-blue-900");
+ document.querySelector(".articles_section").style.display = "block";
+  // document.querySelector(".add_article_section").style.display = "none";
+});
+
   document.querySelector(".btn_y").classList.add("bg-blue-900");
  document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
   document.querySelector(".voir").classList.remove("bg-blue-900");

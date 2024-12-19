@@ -169,7 +169,18 @@ include('connect.php');
           </div>
           <div class="p-4 text-right">
             <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Total des Articles</p>
-            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">0</h4>
+            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+            <?php         
+             $author_id = $_SESSION['author_id'];
+             $sql = "SELECT COUNT(id_auteur) FROM article WHERE id_auteur = ?";
+             $stmt = $conn->prepare($sql);
+             $stmt->bind_param("i", $author_id);
+             $stmt->execute();
+             $result = $stmt->get_result();
+             $row = $result->fetch_assoc();
+             echo $row['COUNT(id_auteur)'];
+             ?>
+            </h4>
           </div>
 
         </div>
@@ -181,7 +192,21 @@ include('connect.php');
           </div>
           <div class="p-4 text-right">
             <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Total des vues</p>
-            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">0</h4>
+            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+            <?php 
+             
+           
+             $author_id = $_SESSION['author_id'];
+             $sql = "SELECT SUM(views) FROM article ar join auteur au on ar.id_auteur=au.id_auteur WHERE ar.id_auteur = ?";
+             $stmt = $conn->prepare($sql);
+             $stmt->bind_param("i", $author_id);
+             $stmt->execute();
+             $result = $stmt->get_result();
+             
+             $row = $result->fetch_assoc();
+             echo $row['SUM(views)'];
+             ?>
+            </h4>
           </div>
 
         </div>
@@ -193,7 +218,23 @@ include('connect.php');
           </div>
           <div class="p-4 text-right">
             <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">total des Commentaires</p>
-            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">0</h4>
+            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+
+            <?php 
+             
+           
+             $author_id = $_SESSION['author_id'];
+             $sql = "SELECT count(c.id_comments) FROM article ar join auteur au on ar.id_auteur=au.id_auteur
+              join comments c on c.id_artcile=ar.id_artcile WHERE ar.id_auteur = ?";
+             $stmt = $conn->prepare($sql);
+             $stmt->bind_param("i", $author_id);
+             $stmt->execute();
+             $result = $stmt->get_result();
+             
+             $row = $result->fetch_assoc();
+             echo $row['count(c.id_comments)'];
+             ?>
+            </h4>
           </div>
    
         </div>
@@ -205,7 +246,22 @@ include('connect.php');
           </div>
           <div class="p-4 text-right">
             <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Moyenne des vues </p>
-            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">0</h4>
+            <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+            <?php 
+             
+           
+             $author_id = $_SESSION['author_id'];
+             $sql = "SELECT FORMAT(AVG(views), 2) FROM article ar join auteur au on ar.id_auteur=au.id_auteur WHERE ar.id_auteur = ?";
+             $stmt = $conn->prepare($sql);
+             $stmt->bind_param("i", $author_id);
+             $stmt->execute();
+             $result = $stmt->get_result();
+             
+             $row = $result->fetch_assoc();
+             echo $row['FORMAT(AVG(views), 2)'];
+             ?>
+
+            </h4>
           </div>
 
         </div>
@@ -261,12 +317,26 @@ include('connect.php');
   </div>
 </div>
 <script>
-
+const authorName = "<?php echo isset($_SESSION['author_name']) ? $_SESSION['author_name'] : 'Unknown'; ?>";
+document.querySelector(".username").textContent = "Bienvenue " + authorName;
 document.querySelector(".dashboard_t").addEventListener("click", () => {
     window.location.href = "http://localhost/BlogPress---Projet/public/dashboard.php";
 
 
 });
+
+
+document.querySelector(".Add_article").addEventListener("click", () => {
+
+//   document.querySelector(".btn_y").classList.add("bg-blue-900");
+//  document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
+//  document.querySelector(".voir").classList.remove("bg-blue-900");
+//   document.querySelector(".articles_section").style.display = "none";
+//   document.querySelector(".add_article_section").style.display = "block";
+window.location.href = "http://localhost/BlogPress---Projet/public/addform.php";
+});
+
+
   ddocument.querySelector(".gerer_comment").classList.add("bg-blue-900");
   document.querySelector(".btn_y").classList.remove("bg-blue-900");
  document.querySelector(".dashboard_t").classList.remove("bg-blue-900");
