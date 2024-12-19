@@ -74,7 +74,7 @@ include('connect.php');
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-5 h-5 text-inherit">
                 <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"></path>
               </svg>
-              <p class="gerer_comment block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">Gérer Les Cemmentaires</p>
+              <p class="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">Gérer Les Cemmentaires</p>
             </button>
           </a>
         </li>
@@ -215,20 +215,20 @@ include('connect.php');
             <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">My Articles's Comment </h2>
             <div class="grid gap-4">
             <?php 
- $author_id = $_SESSION['author_id'];    
-$sql = "SELECT * FROM  article a
-JOIN comments c  ON c.id_artcile = a.id_artcile 
-WHERE a.id_auteur = ?";
+                  $author_id = $_SESSION['author_id'];    
+                  $sql = "SELECT * FROM  article a
+                  JOIN comments c  ON c.id_artcile = a.id_artcile 
+                  WHERE a.id_auteur = ?";
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $author_id);
-$stmt->execute();
-$result = $stmt->get_result();
+                  $stmt = $conn->prepare($sql);
+                  $stmt->bind_param("i", $author_id);
+                  $stmt->execute();
+                  $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-   
-?>
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+          
+              ?>
        <div class="bg-white p-6 rounded-lg shadow-md justify-between flex flex-wrap hover:shadow-lg transition-shadow">
     <h3 class="text-xl font-bold mb-2"><?php echo htmlspecialchars($row['visiteur_name']); ?></h3>
     <h3 class="text-xl font-bold mb-2 text-gray-800"><?php echo htmlspecialchars($row['visiteur_email']); ?></h3>

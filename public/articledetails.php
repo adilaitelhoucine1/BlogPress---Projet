@@ -13,8 +13,8 @@ if (isset($_GET['id_article'])) {
     if ($stmt->execute()) {
         $result = $stmt->get_result(); 
         $row = $result->fetch_assoc(); 
-        print_r($row);
-        echo "<br>";
+        // print_r($row);
+  
         
         $views = $row['views'];  
         $views++;  
@@ -62,12 +62,32 @@ if (isset($_GET['id_article'])) {
       <div>
         <span>By: <span class="font-semibold text-gray-800 capitalize"><?php echo htmlspecialchars($row['username']); ?> </span></span>
         <span class="ml-4">Published: <span class="font-semibold"><?php echo htmlspecialchars($row['created_at']); ?></span></span>
+        
       </div>
-      <div class="mt-2 sm:mt-0">
+      <div class="mt-2 sm:mt-0 flex gap-3">
         <span class="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 22c-4.3 0-8.4-2.5-10.2-6.4-.1-.3-.1-.7 0-1 .1-.3.3-.6.6-.7l10-6c.4-.3.9-.3 1.3 0l10 6c.3.2.5.4.6.7.1.3.1.7 0 1C20.4 19.5 16.3 22 12 22z"></path><path d="M12 2C6.5 2 2 6.5 2 12c0 1.3.2 2.6.6 3.8L12 10l9.4 5.8c.4-1.2.6-2.5.6-3.8 0-5.5-4.5-10-10-10z"></path></svg>
           <span><?php echo htmlspecialchars($row['views']); ?> Views</span>
         </span>
+
+
+
+        <form action="test.php?id_article=<?php echo htmlspecialchars($row['id_artcile']); ?>" method="get">
+    <button class="flex gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+            <path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z" />
+        </svg>
+        <span></span>
+
+        <a href="like.php?id_article=<?php echo ($row['id_artcile']); ?>" class="text-blue-500 hover:underline"><?php echo htmlspecialchars($row['likes']); ?> Likes</a>
+    </button>
+    
+
+        </form>
+
+
+
+
       </div>
     </div>
 
@@ -98,7 +118,7 @@ $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            
+
 ?>
                <div class="bg-gray-100 p-4 rounded-lg">
          <div class="flex flex-wrap gap-2">
@@ -130,8 +150,30 @@ $result = $stmt->get_result();
 
       </div>
 
+      <?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_comment'])) {
+    $name = $_POST['name'];
+    $content = $_POST['comment'];
+    $articleId = $_GET['id_article'];
+    $email = $_POST['email'];
+
+    $stmt = $conn->prepare("INSERT INTO comments (content, visiteur_name, visiteur_email, id_artcile) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("sssi", $content, $name, $email, $articleId);
+
+    if ($stmt->execute()) {
+        // Redirect to avoid form resubmission on page refresh
+        header("Location: articledetails.php?id_article=" . $articleId . "&comment=success");
+        exit;
+    } else {
+        echo "<script>alert('Error: Could not add the comment');</script>";
+    }
+
+    $stmt->close();
+}
+?>
+
       <!-- Add Comment Form -->
-      <form action="add_comment.php" method="POST" class="bg-gray-50 p-6 rounded-lg shadow-md">
+      <form method="POST" class="bg-gray-50 p-6 rounded-lg shadow-md">
         <h3 class="text-lg font-semibold mb-4">Leave a Comment</h3>
         <input type="hidden" name="article_id" value="<?php echo htmlspecialchars($articleId); ?>" />
         <div class="mb-4">
@@ -144,6 +186,20 @@ $result = $stmt->get_result();
             required 
           />
         </div>
+
+
+        <div class="mb-4">
+          <label for="name" class="block text-gray-600 font-medium">Your Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            class="w-full mt-2 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            required 
+          />
+        </div>
+
+
         <div class="mb-4">
           <label for="comment" class="block text-gray-600 font-medium">Your Comment</label>
           <textarea 
@@ -154,14 +210,15 @@ $result = $stmt->get_result();
             required></textarea>
         </div>
         <button 
-          type="submit" 
+          type="submit"
+          name="add_comment" 
           class="px-6 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow">
           Submit Comment
         </button>
       </form>
     </div>
 
-    <!-- Back Button -->
+   
     <div class="mt-8">
       <a href="index.php" class="inline-block px-6 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow">
         Back to Articles

@@ -9,7 +9,7 @@ if (isset($_GET['id'])) {
   
     if ($stmt->execute()) {
         echo "<script>alert('Commentaire supprimé avec succès');</script>";
-        header("Location: dashboard.php"); 
+        header("Location: commentmanagement.php"); 
 
     } else {
         echo "<script>alert('Erreur lors de la suppression');</script>";
