@@ -1,4 +1,5 @@
-<?php
+<?php 
+session_start();
 include('connect.php');
 
 ?>
@@ -84,69 +85,59 @@ include('connect.php');
           <h2 class="text-3xl font-extrabold text-gray-800 inline-block">LATEST BLOGS</h2>
           <p class="text-gray-600 text-sm mt-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis accumsan, nunc et tempus blandit, metus mi consectetur felis turpis vitae ligula.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12 max-lg:max-w-3xl max-md:max-w-md mx-auto">
-          <div class="bg-white cursor-pointer rounded-lg overflow-hidden group relative before:absolute before:inset-0 before:z-10 before:bg-black before:opacity-60">
-            <img src="https://readymadeui.com/Imagination.webp" alt="Blog Post 1" class="w-full h-96 object-cover group-hover:scale-110 transition-all duration-300" />
-            <div class="p-6 absolute bottom-0 left-0 right-0 z-20">
-              <span class="text-sm block mb-2 text-yellow-400 font-semibold">10 FEB 2023 | BY JOHN DOE</span>
-              <h3 class="text-xl font-bold text-white">A Guide to Igniting Your Imagination</h3>
-              <div class="mt-4">
-                <p class="text-gray-200 text-sm ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis accumsan, nunc et tempus blandit, metus mi consectetur felis turpis vitae ligula.</p>
-              </div>
+
+
+
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12 max-w-6xl mx-auto">
+    <?php 
+    $sql = "SELECT * FROM article ar JOIN auteur au ON ar.id_auteur = au.id_auteur;";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) { 
+     
+    ?>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden group relative">
+            <img src="https://readymadeui.com/Imagination.webp"  class="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300">
+            
+            <div class="p-6 relative">
+                <div class="text-sm text-gray-500 mb-2">
+                    <span><?php echo htmlspecialchars($row['created_at']); ?></span> | 
+                    <span class="font-semibold"><?php echo htmlspecialchars($row['username']); ?></span>
+                </div>
+                
+                <h3 class="text-lg font-bold text-gray-800 hover:text-yellow-500 transition-colors">
+                    <?php echo htmlspecialchars($row['title']); ?>
+                </h3>
+                
+                <p class="text-gray-600 text-sm mt-4 line-clamp-3">
+                    <?php echo htmlspecialchars($row['content']); ?>
+                </p>
             </div>
-          </div>
-          <div class="bg-white cursor-pointer rounded-lg overflow-hidden group relative before:absolute before:inset-0 before:z-10 before:bg-black before:opacity-60">
-            <img src="https://readymadeui.com/hacks-watch.webp" alt="Blog Post 2" class="w-full h-96 object-cover group-hover:scale-110 transition-all duration-300" />
-            <div class="p-6 absolute bottom-0 left-0 right-0 z-20">
-              <span class="text-sm block mb-2 text-yellow-400 font-semibold">7 JUN 2023 | BY MARK ADAIR</span>
-              <h3 class="text-xl font-bold text-white">Hacks to Supercharge Your Day</h3>
-              <div class="mt-4">
-                <p class="text-gray-200 text-sm ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis accumsan, nunc et tempus blandit, metus mi consectetur felis turpis vitae ligula.</p>
-              </div>
+            <div class="p-4 bg-gray-100 flex items-center justify-between text-gray-600 text-sm">
+                <div class="flex items-center space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553 3.276c.342.246.447.667.267 1.013l-2.553 4.49c-.18.318-.507.522-.867.522H7.6c-.36 0-.687-.204-.867-.522l-2.553-4.49c-.18-.346-.075-.767.267-1.013L9 10l-4.553-3.276c-.342-.246-.447-.667-.267-1.013l2.553-4.49c.18-.318.507-.522.867-.522h8.8c.36 0 .687.204.867.522l2.553 4.49c.18.346.075.767-.267 1.013L15 10z" />
+                    </svg>
+                    <span><?php echo htmlspecialchars($row['views']); ?> vues</span>
+                </div>
+                
+                
+                <a href="articledetails.php?id_article=<?php echo ($row['id_artcile']); ?>" class="text-blue-500 hover:underline">Lire plus</a>
             </div>
-          </div>
-          <div class="bg-white cursor-pointer rounded-lg overflow-hidden group relative before:absolute before:inset-0 before:z-10 before:bg-black before:opacity-60">
-            <img src="https://readymadeui.com/prediction.webp" alt="Blog Post 3" class="w-full h-96 object-cover group-hover:scale-110 transition-all duration-300" />
-            <div class="p-6 absolute bottom-0 left-0 right-0 z-20">
-              <span class="text-sm block mb-2 text-yellow-400 font-semibold">5 OCT 2023 | BY SIMON KONECKI</span>
-              <h3 class="text-xl font-bold text-white">Trends and Predictions</h3>
-              <div class="mt-4">
-                <p class="text-gray-200 text-sm ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis accumsan, nunc et tempus blandit, metus mi consectetur felis turpis vitae ligula.</p>
-              </div>
-            </div>
-          </div>
-          <div class="bg-white cursor-pointer rounded-lg overflow-hidden group relative before:absolute before:inset-0 before:z-10 before:bg-black before:opacity-60">
-            <img src="https://readymadeui.com/images/food.webp" alt="Blog Post 3" class="w-full h-96 object-cover group-hover:scale-110 transition-all duration-300" />
-            <div class="p-6 absolute bottom-0 left-0 right-0 z-20">
-              <span class="text-sm block mb-2 text-yellow-400 font-semibold">5 OCT 2023 | BY SIMON KONECKI</span>
-              <h3 class="text-xl font-bold text-white">Trends and Predictions</h3>
-              <div class="mt-4">
-                <p class="text-gray-200 text-sm ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis accumsan, nunc et tempus blandit, metus mi consectetur felis turpis vitae ligula.</p>
-              </div>
-            </div>
-          </div>
-          <div class="bg-white cursor-pointer rounded-lg overflow-hidden group relative before:absolute before:inset-0 before:z-10 before:bg-black before:opacity-60">
-            <img src="https://readymadeui.com/images/food11.webp" alt="Blog Post 3" class="w-full h-96 object-cover group-hover:scale-110 transition-all duration-300" />
-            <div class="p-6 absolute bottom-0 left-0 right-0 z-20">
-              <span class="text-sm block mb-2 text-yellow-400 font-semibold">5 OCT 2023 | BY SIMON KONECKI</span>
-              <h3 class="text-xl font-bold text-white">Trends and Predictions</h3>
-              <div class="mt-4">
-                <p class="text-gray-200 text-sm ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis accumsan, nunc et tempus blandit, metus mi consectetur felis turpis vitae ligula.</p>
-              </div>
-            </div>
-          </div>
-          <div class="bg-white cursor-pointer rounded-lg overflow-hidden group relative before:absolute before:inset-0 before:z-10 before:bg-black before:opacity-60">
-            <img src="https://readymadeui.com/images/food22.webp" alt="Blog Post 3" class="w-full h-96 object-cover group-hover:scale-110 transition-all duration-300" />
-            <div class="p-6 absolute bottom-0 left-0 right-0 z-20">
-              <span class="text-sm block mb-2 text-yellow-400 font-semibold">5 OCT 2023 | BY SIMON KONECKI</span>
-              <h3 class="text-xl font-bold text-white">Trends and Predictions</h3>
-              <div class="mt-4">
-                <p class="text-gray-200 text-sm ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis accumsan, nunc et tempus blandit, metus mi consectetur felis turpis vitae ligula.</p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+    <?php 
+        }
+    } else {
+        echo "<p class='text-center text-gray-600'>No articles.</p>";
+    }
+    ?>
+</div>
+
     </div>
 
 

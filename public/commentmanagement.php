@@ -251,7 +251,7 @@ $result = $stmt->get_result();
 <?php 
         }
     } else {
-        echo "walo comments.";
+        echo "there is no comments.";
     }
 ?>
 
