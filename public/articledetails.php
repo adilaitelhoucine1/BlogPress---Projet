@@ -161,7 +161,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_comment'])) {
     $stmt->bind_param("sssi", $content, $name, $email, $articleId);
 
     if ($stmt->execute()) {
-        // Redirect to avoid form resubmission on page refresh
         header("Location: articledetails.php?id_article=" . $articleId . "&comment=success");
         exit;
     } else {
