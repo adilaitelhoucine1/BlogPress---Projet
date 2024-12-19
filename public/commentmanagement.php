@@ -236,7 +236,7 @@ $result = $stmt->get_result();
     <p class="text-red-600 mb-4 font-semibold">Article ID: <?php echo htmlspecialchars($row['id_artcile']); ?></p>
     <div class="flex justify-between items-center text-sm text-gray-500">
         <span class="mr-8">Created: <?php echo $row['created_at']; ?></span>
-        <form action="delete_comment.php" method="POST" class="flex items-center">
+        <form action="delete_comment.php?id=<?php echo $row['id_comments']; ?>" method="POST" class="flex items-center">
             <input type="hidden" name="comment_id" value="<?php echo $row['id_artcile']; ?>" />
             <button type="submit" class="text-red-500 hover:text-red-700 font-semibold focus:outline-none transition duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
