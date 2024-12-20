@@ -33,6 +33,8 @@ if (isset($_GET['idDelete'])) {
     <title>Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
  
@@ -435,6 +437,24 @@ if (isset($_GET['idDelete'])) {
     </div>
 </div>
 
+
+        <!-- chartjs -->
+         <div class="flex gap-3	justify-around	flex-wrap">
+
+           <div style=" width: 500px;height: 500px">
+             <canvas id="myChart"></canvas>
+           </div>
+   
+           <div style=" width: 500px;height: 500px">
+             <canvas id="SecondChart"></canvas>
+           </div>
+
+        
+
+         </div>
+         <div style=" width: 500px;height: 500px">
+             <canvas id="Chart"></canvas>
+          </div>
       </div>
     </div>
  
@@ -603,5 +623,119 @@ document.querySelector("#closeEditModal").addEventListener("click", () => {
 
 
 </script>
+<script>
+  
+ 
+  
+  var data=[      
+<?php
+
+          
+$author_id =$_SESSION['author_id'];;
+$sql = "SELECT 
+      COUNT(DISTINCT ar.id_artcile) AS total_articles, 
+      COUNT(c.id_comments) AS total_comments, 
+      SUM(ar.views) AS total_views, 
+      SUM(ar.likes) AS total_likes
+      FROM auteur au
+      JOIN article ar 
+          ON au.id_auteur = ar.id_auteur
+      LEFT JOIN comments c 
+          ON ar.id_artcile = c.id_artcile
+      WHERE au.id_auteur = ?";
+
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $author_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$row = $result->fetch_assoc();
+echo $row['total_comments'].",".$row['total_articles'].",".$row['total_views'].",".$row['total_likes'];
+?>]; 
+
+// chart js 
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Commentaire', 'Articles', 'Vues', 'Likes'],
+      datasets: [{
+        label: '# ',
+        data: data,
+        borderWidth: 1
+      }],
+      
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  const ctxs = document.getElementById('SecondChart');
+  new Chart(ctxs, {
+  type: 'polarArea',
+  data: {
+    labels: ['Commentaire', 'Articles', 'Vues', 'Likes'],
+    datasets: [{
+      label: '# ',
+      data: data,
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.6)', 
+        'rgba(10, 10, 256, 0.6)', 
+        'rgba(255, 206, 86, 0.6)', 
+        'rgba(75, 192, 192, 0.6)'  
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',  
+        'rgba(54, 162, 235, 1)',  
+        'rgba(255, 206, 86, 1)',  
+        'rgba(75, 192, 192, 1)'   
+      ],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+
+
+  const ctxv = document.getElementById('Chart');
+
+  new Chart(ctxv, {
+    type: 'line',
+    data: {
+      labels: ['Commentaire', 'Articles', 'Vues', 'Likes'],
+      datasets: [{
+        label: '# ',
+        data: data,
+        borderWidth: 1
+      }],
+      
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+
+
+
+</script>
+
 </body>
 </html>

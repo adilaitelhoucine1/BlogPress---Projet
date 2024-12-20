@@ -11,6 +11,8 @@ include('connect.php');
   <title>Home Page</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <header class='flex shadow-md py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50'>
@@ -140,9 +142,48 @@ include('connect.php');
 
     </div>
 
+    <!-- <div class="flex gap-3	justify-around	flex-wrap">
+
+<div style=" width: 500px;height: 500px">
+  <canvas id="myChart"></canvas>
+</div>
+
+<div style=" width: 500px;height: 500px">
+  <canvas id="SecondChart"></canvas>
+</div> -->
+
+
+
+</div>
+
 
 
 <script>
+
+
+
+  // const ctx = document.getElementById('myChart');
+  
+  // new Chart(ctx, {
+  //   type: 'bar',
+  //   data: {
+  //     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  //     datasets: [{
+  //       label: '# of Votes',
+  //       data: [12, 19, 3, 5, 2, 3],
+  //       borderWidth: 1
+  //     }]
+  //   },
+  //   options: {
+  //     scales: {
+  //       y: {
+  //         beginAtZero: true
+  //       }
+  //     }
+  //   }
+  // });
+
+  
  var toggleOpen = document.getElementById('toggleOpen');
 var toggleClose = document.getElementById('toggleClose');
 var collapseMenu = document.getElementById('collapseMenu');

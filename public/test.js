@@ -1,1 +1,6 @@
-document.querySelector(".edit_btn").textContent
+document.querySelectorAll(".btn").forEach(btn => {
+    
+    btn.addEventListener("click",()=>{
+        
+    })
+});
