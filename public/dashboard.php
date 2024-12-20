@@ -2,7 +2,10 @@
 session_start();
 include('connect.php');
 
+if(!($_SESSION['author_name'])){
+  header("Location: index.php"); 
 
+}
                      
 if (isset($_GET['idDelete'])) {
   $articleId = $_GET['idDelete'];

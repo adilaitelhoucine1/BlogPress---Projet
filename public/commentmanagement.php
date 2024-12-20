@@ -1,7 +1,10 @@
 <?php 
 session_start();
 include('connect.php');
+if(!($_SESSION['author_name'])){
+  header("Location: index.php"); 
 
+}
 
 
 
