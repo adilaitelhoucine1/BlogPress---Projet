@@ -150,6 +150,7 @@ include('connect.php');
 
 <div style=" width: 500px;height: 500px">
   <canvas id="SecondChart"></canvas>
+  
 </div> -->
 
 
