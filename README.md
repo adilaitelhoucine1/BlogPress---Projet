@@ -1,3 +1,4 @@
+[![wakatime](https://wakatime.com/badge/user/ff52345a-93dc-4f6f-969d-00268863daf7/project/8a57c9d5-3264-4d55-86b1-2f7be7c449e5.svg)](https://wakatime.com/badge/user/ff52345a-93dc-4f6f-969d-00268863daf7/project/8a57c9d5-3264-4d55-86b1-2f7be7c449e5)
 # 🌟 BlogPress
 
 BlogPress est une plateforme de blog moderne développée en PHP et MySQL, avec des fonctionnalités d'analyse pour suivre les performances des articles. Ce projet vise à offrir aux utilisateurs une expérience de publication enrichie tout en permettant aux auteurs de suivre l'impact de leurs contenus grâce à des statistiques visuelles intégrées avec Chart.js.
